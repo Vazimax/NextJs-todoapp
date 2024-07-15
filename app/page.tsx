@@ -1,9 +1,15 @@
 import Link from 'next/link'; // Import Link from next/link
 import { prisma } from "@/db"
+import { get } from 'http';
+import { ToDoItem } from './components/ToDoItem';
+
+function getTodos(){
+  return prisma.todo.findMany()
+}
 
 
 export default async function Home() {
-const todos = await prisma.todo.findMany()
+  const todos = await getTodos()
 
   return (
     <>
@@ -18,7 +24,7 @@ const todos = await prisma.todo.findMany()
       </header>
       <ul className='pl-5'>
         {todos.map(todo=>
-          <li key={todo.id}>{todo.title}</li>
+          <ToDoItem key={todo.id}{...todo}></ToDoItem>
         )}
       </ul> 
     </>
